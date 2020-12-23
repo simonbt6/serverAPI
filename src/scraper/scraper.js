@@ -10,11 +10,14 @@ products.shops.push({
     price: ''
 });
 
-fuction scraper(){
+function scraper(){
     
 }
 
 /**
- * ID: 
- * Name: 
+ * ID: Product ID 
+ * Name: Product Name
+ * Shop:
+ *  -   shop_name: Shop's name
+ *  -   price: Shop's price of the product
  */

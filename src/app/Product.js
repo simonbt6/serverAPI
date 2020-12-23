@@ -1,5 +1,16 @@
+/**
+ * @class Product
+ * @description Product Entity
+ */
 class Product {
-
+    /**
+     * 
+     * @param {Text} name 
+     * @param {Number} shop 
+     * @param {Text} url 
+     * @param {Number} price 
+     * @param {Array<Text>} tags 
+     */
     constructor(name, shop, url, price, tags = []){
         this.name = name;
         this.shop = shop;
@@ -19,17 +30,20 @@ class Product {
     getPrice(){
         return this.price;
     }
+    getURL(){
+        return this.url;
+    }
 }
-let Products = [];
-Products.sort();
+// let Products = [];
+
 
 // OBJ => PRODUITS --> TAGS
-for(i = 0; i <= OBJ.length; i++){
-    var obj = OBJ[i];
-    var product;
-    product = new Product(obj.name, obj.shops);
-    Products.push(product);
-}
+//for(i = 0; i <= OBJ.length; i++){
+//    var obj = OBJ[i];
+//    var product;
+//    product = new Product(obj.name, obj.shops);
+//    Products.push(product);
+//}
 
 module.exports.Product = Product;
 

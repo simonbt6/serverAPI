@@ -3,34 +3,15 @@ const morgan = require('morgan');
 const fs = require('fs');
 const products = require('./products.json');
 const startup = require('./src/app/startup');
+const ProductJS = require('./src/app/Product');
+
 const app = express();
 
-startup.startup;
+const _products = startup.getProducts(products);
 
 app.use(morgan('dev'));
 app.use(express.json());
 
-
-// add a product
-products.push({
-    id: '',
-    name: '',
-    shops:[] 
-});
-//add a shop
-products.shops.push({
-    shop_name: '',
-    price: ''
-});
-
-console.log(products);
-/**
- * liste de tt []
- * -- produits array{}
- * -- --le produit
- * -- -- --les shop ou on peut les trouver
- * 
- */
 
 // ROUTER
 // ROOT
@@ -42,20 +23,21 @@ app.get('/', (req, res) => {
 // Products
 app.get('/products/', (req, res) => {
     if(req.body.productid !=undefined){
-        
-        var product = products[req.body.productid];
-        console.log("Product: " + product);
+        var $product = _products[req.body.productid];
+        //var product = products[req.body.productid];
+        console.log("Product: " + $product.getName());
         res.json({
             message: "Products",
-            product: product,
-            price: "1$"
+            name: $product.getName(),
+            url: $product.getURL(),
+            price: $product.getPrice() + "$"
         });
     }
     else
     {
-        res.json({
-            message: "Display all products"
-        });
+        res.json(
+            _products
+        );
     }
 });
 // Users
