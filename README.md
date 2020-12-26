@@ -25,6 +25,7 @@ API for store front.
     * [ ] Lastname
     * [ ] Email
     * [ ] Password
+    * [ ] ip_address
     * [ ] update_at
     * [ ] created_at
 
