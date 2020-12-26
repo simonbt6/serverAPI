@@ -11,7 +11,7 @@ API for store front.
     * [ ] price
     * [ ] tags
     * [ ] updated_at
-    * [  created_at
+    * [ ] created_at
 * [ ] Shop
     * [ ] id
     * [ ] name
@@ -31,7 +31,7 @@ API for store front.
 
 
 ## API Endpoints
-* [ ] Product
+* [ ] Product
     * [ ] List
     * [ ] Create
     * [ ] Get one
@@ -49,3 +49,4 @@ API for store front.
     * [ ] Get one
     * [ ] Update
     * [ ] Delete
+    
