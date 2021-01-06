@@ -1,0 +1,23 @@
+IMPLEMENT:
+    USER:
+     - Users route
+        * POST Login
+        * POST Register
+     - USER database.
+        * id
+        * Firstname
+        * Lastname
+        * email
+        * password
+        * last_seen
+        * created_at
+     - User handling
+        * Login
+        * Register
+        * Lost password
+     - Favorite Products
+
+    Products:
+    - Scraper
+        * SETUP Amazon API
+        * SETUP Shop API
