@@ -11,7 +11,7 @@ class Product {
      * @param {Number} price 
      * @param {Array<Text>} tags 
      */
-    constructor(id, name, shop, url, price, brand, tags = []){
+    constructor(id, name, shop, url, price, brand, tags = [], size = 0){
         this.id = id;
         this.name = name;
         this.shop = shop;
@@ -19,21 +19,7 @@ class Product {
         this.url = url;
         this.price = price;
         this.brand = brand;
-    }
-    getShop(){
-        return this.shop;
-    }
-    getName(){
-        return this.name;
-    }
-    getShop(){
-        return this.shop;
-    }
-    getPrice(){
-        return this.price;
-    }
-    getURL(){
-        return this.url;
+        this.size_id = size;
     }
     addTag(){
         this.tags.push(tag);  
@@ -71,8 +57,8 @@ module.exports.getDbProducts = function (Connection, callback) {
 }
 // "INSERT INTO product(name, shop_id, url, price) VALUES ("+product.name+", )"
 // Add product to database
-module.exports.AddProductToDb = function(product, Connection) {
-    var sql = "INSERT INTO product(name, shop, url, price, brand) VALUES ('"+product.name+"', '"+product.shop+"',  '"+product.url+"', '"+product.price+"', '"+product.brand+"')"
+module.exports.addProductToDb = function(product, Connection) {
+    var sql = "INSERT INTO product(name, shop, url, price, brand, size_id) VALUES ('"+product.name+"', '"+product.shop+"',  '"+product.url+"', '"+product.price+"', '"+product.brand+"')"
     Connection.query(sql, function (error){
         if(error != null){
             if(error.errno == 1062) return false;
@@ -81,4 +67,19 @@ module.exports.AddProductToDb = function(product, Connection) {
         console.log("Record added");
     }); 
 }
+//update a product
+module.exports.updateProduct = function(product, Connection){
+    const sql = "UPDATE product SET name='" + product.name + "', url='"+product.url+"', price='"+product.price+"', shop='"+product.shop+"', brand='"+product.brand+"', size_id='"+product.size_id+"'  WHERE id="+id
+    Connection.query(sql, function(error){
+        if(error) return consol.log(error)
+    });
+}
+//delete a product
+module.exports.deleteProduct = function(id, Connection) {
+    Connection.query('DELETE FROM product WHERE id='+id, function(error){
+        if(error) return console.log(error);
+    });
+
+}
+
 module.exports.Product = Product;

@@ -2,7 +2,7 @@
 API for store front.
 
 ## Database Tables
-* [X] Product
+* [X] product
     * [X] id
     * [X] name
     * [X] brand
@@ -11,31 +11,36 @@ API for store front.
     * [X] price
     * [X] updated_at
     * [X] created_at
-* [X] Shop
+* [X] shop
     * [X] id
     * [X] name
     * [X] url
     * [X] country
     * [X] updated_at
     * [X] created_at
-* [X] User
+* [X] user
     * [X] UUID
-    * [X] Firstname
-    * [X] Lastname
-    * [X] Email
+    * [X] firstname
+    * [X] lastname
+    * [X] email
     * [X] Password
     * [X] ip_address
     * [X] update_at
     * [X] created_at
-* [X] Tags
+* [X] tags
     * [X] id
     * [X] name
 * [X] product_tags
     * [X] id
+    * [X] tag_id
     * [X] product_id
-    * [X] tag_id
-
-
+* [ ] size
+    * [ ] id
+    * [ ] height
+    * [ ] width
+    * [ ] length
+    * [ ] weight
+    * [ ] metric
 
 ## API Endpoints
 * [ ] Product
@@ -44,16 +49,16 @@ API for store front.
     * [X] Get one
     * [ ] Update
     * [ ] Delete
-* [ ] Shop
+* [] Shop
     * [ ] List
     * [ ] Create
     * [ ] Get one
     * [ ] Update
     * [ ] Delete
 * [ ] User
-    * [ ] List
-    * [ ] Create
-    * [ ] Get one
-    * [ ] Update
+    * [X] List
+    * [X] Create
+    * [X] Get one
+    * [X] Update
     * [ ] Delete
     

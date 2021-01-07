@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const app = express();
+const config = require('./src/app/config.json')
 const ProductRoute = require('./src/app/route/productRoute');
 const ShopRoute = require('./src/app/route/shopRoute');
 const UserRoute = require('./src/app/route/userRoute');
@@ -18,25 +19,32 @@ app.get('/', (req, res) => {
     });
 });
 // Products
-app.post('/products/', ProductRoute.add);
 app.get('/products/:id', ProductRoute.listOne);
 app.get('/products/', ProductRoute.listAll);
+app.post('/products/delete/:id', ProductRoute.del);
+app.post('/products/update/:id', ProductRoute.update);
+app.post('/products/', ProductRoute.add);
 
-// Shops
-// Add new shop
-app.get('/shop/add', (req, res) => {
-    res.send('New shop');
-});
-
+// Shops:
+// List one shop
+app.get('/shop/:id', ShopRoute.listOne);
+// List all shops
+app.get('/shop/', ShopRoute.listAll);
+// Add a shop
+app.post('/shop/add', ShopRoute.create);
+// Delete shop
+app.post('/shop/delete/:id', ShopRoute.deleteOne);
 
 
 // Users
 // TODO: Implement USERS
-app.get('/users/:id', ShopRoute.listAll);
-app.get('/favicon.ico', ShopRoute.listOne);
+app.get('/users/:id', UserRoute.listOne);
+app.post('/users/', UserRoute.create);
+app.get('/users/', UserRoute.listAll);
+app.post('/users/update/:id', UserRoute.update);
 
 
 
-app.listen(80);
+app.listen(config.app.PORT);
 
 

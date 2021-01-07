@@ -4,6 +4,9 @@ const mysql = require('mysql');
 const config = require('../config.json');
 const db = mysql.createConnection(config.Database);
 
+
+
+
 // add new product
 async function add(req,res, next){
     if(req.body.productInfo.name !=undefined && req.body.productInfo.url !=undefined ){
@@ -29,6 +32,7 @@ async function add(req,res, next){
 async function listAll(req, res, next){
     console.log(req.ip);
     ProductJS.getDbProducts(db, function(e){
+        
         res.json(e);
     });
 }
@@ -61,8 +65,45 @@ async function listOne(req, res, next){
     }
 }
 
+async function del(req, res, next){
+    if(req.params.id != undefined){
+        let id = parseInt(req.params.id);
+        if(typeof id  == 'number'){
+            ProductJS.deleteProduct(id, db, function(e){
+                if(e){
+                    res.json(e);
+                }
+                else{
+                    res.status(400);
+                    res.json({
+                        message: "Invalid product ID"
+                    });
+                }
+            });
+        }
+        else{
+            res.status(400);
+            res.json({
+                message: "Invalid product ID"
+            });
+        }
+    }
+}
+
+async function update(req, res, next){
+    const r = req.body.productInfo;
+    const name = r.name;
+    const brand = r.brand;
+    const Product = new ProductJS.Product(name, shop, url, price, brand)
+}
+
+
+
 module.exports = {
     add,
     listOne,
-    listAll
+    del,
+    update,
+    listAll,
+
 }
