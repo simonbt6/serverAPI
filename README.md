@@ -49,7 +49,7 @@ API for store front.
     * [X] Get one
     * [ ] Update
     * [ ] Delete
-* [] Shop
+* [ ] Shop
     * [ ] List
     * [ ] Create
     * [ ] Get one
