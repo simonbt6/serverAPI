@@ -12,7 +12,7 @@ class User{
      * @param {Text} UUID 
      */
     constructor(firstname, lastname, email, ip_address, UUID){
-        if(UUID == undefined) this.UUID=uuidv4()
+        if(UUID == undefined) this.UUID=uuidv4();
         else this.UUID = UUID;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -31,7 +31,7 @@ function createUUID(){return uuidv4();}
  * 
  */
 function createUser(user,password, Connection){
-    var sql = "INSERT INTO user(UUID, firstname, lastname, email, password, ip_address) VALUES ('"+user.UUID+"', '"+user.firstname+"',  '"+user.lastname+"', '"+user.email+"', '"+password+"', '"+user.ip_address+"')"
+    var sql = "INSERT INTO user(uuid, firstname, lastname, email, password, ip_address) VALUES ('"+user.UUID+"', '"+user.firstname+"',  '"+user.lastname+"', '"+user.email+"', '"+password+"', '"+user.ip_address+"')"
     Connection.query(sql, function (error){
         if(error != null){
             if(error.errno == 1062) return false;
@@ -52,7 +52,7 @@ function listUsers(Connection, callback){
         if(error) return console.log(error);
         for(i = 0; i < results.length; i++){
             var userInfos = results[i];
-            var user = new User(userInfos.firstname, userInfos.lastname, userInfos.email, userInfos.ip_address, userInfos.UUID);
+            var user = new User(userInfos.firstname, userInfos.lastname, userInfos.email, userInfos.ip_address, userInfos.uuid);
             users.push(user);
         }
         callback(users);
@@ -60,7 +60,7 @@ function listUsers(Connection, callback){
 }
 
 function listUser(uuid, Connection, callback){
-    Connection.query('SELECT firstname, lastname, email, ip_address FROM user WHERE uuid='+uuid, function(error, results) {
+    Connection.query('SELECT firstname, lastname, email, ip_address FROM user WHERE uuid="'+uuid+'"', function(error, results) {
         if (error) return console.log(error);
         if (results[0] == undefined) return false;
         callback(new User(results[0].firstname, results[0].lastname, results[0].email, results[0].ip_address, uuid));
@@ -74,10 +74,27 @@ function listUser(uuid, Connection, callback){
  * @param {import('mysql').Connection} Connection 
  */
 function updateUser(user, Connection){
-    var sql = "UPDATE user SET firstname='"+user.firstname+"', lastname='"+user.lastname+"', email='"+user.email+"' WHERE UUID='"+user.UUID+"'";
+    var sql = "UPDATE user SET firstname='"+user.firstname+"', lastname='"+user.lastname+"', email='"+user.email+"' WHERE uuid='"+user.UUID+"'";
     Connection.query(sql, function(error) {
-        if (error) return console.log(error);
+        if (error){
+            console.log(error)
+            return false;
+        } 
         console.log("User updated --> " + user.UUID);
+    });
+    return true;
+}
+
+/**
+ * 
+ * @param {Text} uuid 
+ * @param {mysql.Connection} Connection 
+ */
+function del(uuid, Connection){
+    var sql = "DELETE FROM user WHERE uuid='"+uuid+"'";
+    Connection.query(sql, function (error, result){
+        if (error) return console.log(error);
+        console.log("User removed --> " + result.affectedRows);
     });
 }
 
@@ -86,6 +103,7 @@ module.exports = {
     createUser,
     listUsers,
     updateUser,
-    listUser
+    listUser,
+    del
 
 }

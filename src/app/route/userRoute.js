@@ -38,9 +38,18 @@ async function listOne(req, res, next){
  * @param {Express.NextFunction} next 
  */
 async function update(req, res, next){
-    const r = req.body.userInfo;
+    const r = req.body.user;
     if(r !=undefined){
-        UserJS.updateUser(new UserJS.User(r.firstname, r.lastname, r.email, r.ip_address, r.uuid), db);
+        if(UserJS.updateUser(new UserJS.User(r.firstname, r.lastname, r.email, r.ip_address, r.uuid), db)){
+            res.json({
+                message: "User updated successfuly.",
+                uuid: r.uuid
+            });
+        }
+        else res.json({
+            message: "Error trying to update user.",
+            uuid: r.uuid
+        });
     }
 }
 /**
@@ -50,14 +59,14 @@ async function update(req, res, next){
  * @param {Express.NextFunction} next 
  */
 async function create(req, res, next){
-    const r = req.body.userInfo
+    const r = req.body.user;
     if(r !=undefined){
         UserJS.createUser(new UserJS.User(r.firstname, r.lastname, r.email, r.ip_address, undefined), r.password, db);
         res.json(r);
     }
     else{
         res.status(400);
-        res.send("Missing arguments.")
+        res.send("Missing arguments.");
     }
     console.log(r);
 }
@@ -69,7 +78,14 @@ async function create(req, res, next){
  * @param {Express.NextFunction} next 
  */
 async function deleteOne(req, res, next){
-
+    const uuid = req.params.id;
+    if(r !=undefined){
+        UserJS.del(uuid, db);
+    }
+    else{
+        res.status(400);
+        res.send("Missing arguments.");
+    }
 }
 
 module.exports = {

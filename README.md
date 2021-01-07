@@ -43,22 +43,22 @@ API for store front.
     * [ ] metric
 
 ## API Endpoints
-* [ ] Product
-    * [X] List
-    * [X] Create
-    * [X] Get one
-    * [ ] Update
-    * [ ] Delete
-* [ ] Shop
-    * [ ] List
-    * [ ] Create
-    * [ ] Get one
-    * [ ] Update
-    * [ ] Delete
-* [ ] User
+* [X] Product
     * [X] List
     * [X] Create
     * [X] Get one
     * [X] Update
-    * [ ] Delete
+    * [X] Delete
+* [X] Shop
+    * [X] List
+    * [X] Create
+    * [X] Get one
+    * [X] Update
+    * [X] Delete
+* [X] User
+    * [X] List
+    * [X] Create
+    * [X] Get one
+    * [X] Update
+    * [X] Delete
     

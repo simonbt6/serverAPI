@@ -69,7 +69,7 @@ module.exports.addProductToDb = function(product, Connection) {
 }
 //update a product
 module.exports.updateProduct = function(product, Connection){
-    const sql = "UPDATE product SET name='" + product.name + "', url='"+product.url+"', price='"+product.price+"', shop='"+product.shop+"', brand='"+product.brand+"', size_id='"+product.size_id+"'  WHERE id="+id
+    const sql = "UPDATE product SET name='" + product.name + "', url='"+product.url+"', price='"+product.price+"', shop='"+product.shop+"', brand='"+product.brand+"', size_id='"+product.size_id+"'  WHERE id="+product.id
     Connection.query(sql, function(error){
         if(error) return consol.log(error)
     });
