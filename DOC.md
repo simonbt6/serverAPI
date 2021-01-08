@@ -1,4 +1,0 @@
-#API ENDPOINTS
-
-**Show users**
-----
