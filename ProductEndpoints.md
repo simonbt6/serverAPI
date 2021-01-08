@@ -1,7 +1,13 @@
 
 
-# Products API Endpoints
 
+# Products API Endpoints
+Table of Contents
+* [Show a Single Product](#show-a-single-product)
+* [Show a All Products](#show-all-products)
+* [Delete Product](#delete-product)
+* [Update Product](#update-product)
+----
 **Show a single product**
 ----
   Returns json data about a single product.
@@ -173,6 +179,7 @@ Returns json data about all products.
 
   * **Code:** 401 UNAUTHORIZED <br />
     **Content:** `{ error : "You are unauthorized to make this request." }`
+    
       ----
   ***Update Product***
   ----
