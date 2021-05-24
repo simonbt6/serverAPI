@@ -6,7 +6,7 @@
 
 int main()
 {
-    StoreAPI::HTTPServer server(9898, "http://localhost:9898", ".");
-    server.listen();
+    StoreAPI::HTTPServer *server = StoreAPI::HTTPServer::get_instance();
+    server->listen();
     return 0;    
 }

@@ -24,6 +24,10 @@ namespace StoreAPI
 
             struct mg_mgr _mgr;
 
+            
+
+            static HTTPServer *_instance;
+
         public:
             void listen();
 
@@ -31,7 +35,9 @@ namespace StoreAPI
 
             static void PRINT(const char *text);
 
-            static Route findRoute(char *name);
+            static HTTPServer *get_instance();
+
+            Route findRoute(char *name);
 
             void addRoute(Route route);
 

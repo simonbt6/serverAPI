@@ -10,6 +10,8 @@ namespace StoreAPI
 
         mg_log_set("2");
         mg_mgr_init(&_mgr);
+
+        loadRoutes();
     }
 
     void HTTPServer::requestHandler(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
@@ -20,11 +22,11 @@ namespace StoreAPI
             
             PRINT(hm->uri.ptr);
             
-            Route route = findRoute("products");
+            Route route = get_instance()->findRoute("products");
 
             route.Go(c, NULL);
-
-            if (mg_http_match_uri(hm, "/api/f1"))
+            /**
+             * if (mg_http_match_uri(hm, "/api/f1"))
             {
                 mg_http_reply(c, 200, "", "{\"results\": %d}\n", 123);
             }
@@ -37,6 +39,7 @@ namespace StoreAPI
                 struct mg_http_serve_opts opts = {"."};
                 mg_http_serve_dir(c, hm, &opts);
             }
+            */
         }
         (void) requestHandler;
     }
@@ -69,6 +72,15 @@ namespace StoreAPI
 
     void HTTPServer::loadRoutes()
     {
-        _routes.push_back(ProductRoute());
+        addRoute(ProductRoute());
+    }
+
+    HTTPServer *HTTPServer::get_instance()
+    {
+        if(_instance == NULL || (typeid(&_instance).name() != typeid(HTTPServer).name()))
+        {
+            _instance = &HTTPServer(9898, "http://localhost:9898", ".");
+        }
+        return _instance;
     }
 }
