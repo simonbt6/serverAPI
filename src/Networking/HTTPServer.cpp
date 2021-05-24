@@ -22,9 +22,9 @@ namespace StoreAPI
             
             PRINT(hm->uri.ptr);
             
-            Route route = get_instance()->findRoute("products");
+            Route* route = get_instance()->findRoute("products");
 
-            route.Go(c, NULL);
+            route->Go(c, NULL);
             /**
              * if (mg_http_match_uri(hm, "/api/f1"))
             {
@@ -56,24 +56,32 @@ namespace StoreAPI
         mg_mgr_free(&_mgr);
     }
 
-    void HTTPServer::addRoute(Route route)
+    void HTTPServer::addRoute(Route* route)
     {
         _routes.push_back(route);
     }
 
-    Route HTTPServer::findRoute(char *name)
+    Route* HTTPServer::findRoute(char *name)
     {
-        for(Route route : _routes)
+        for(Route *route : _routes)
         {
-            if (route.get_name() == name) return route;
+            printf("ROUTE NAME: %c\n", route->get_name());
+            if (route->get_name() == name)
+            {
+                
+                return route;
+            } 
+                
         }
-        return BadRoute();
+        return &BadRoute();
     }
 
     void HTTPServer::loadRoutes()
     {
-        addRoute(ProductRoute());
+        addRoute(&ProductRoute());
     }
+
+    HTTPServer *HTTPServer::_instance = NULL;
 
     HTTPServer *HTTPServer::get_instance()
     {

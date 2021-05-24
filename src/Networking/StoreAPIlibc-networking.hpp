@@ -10,7 +10,6 @@
 #ifndef StoreAPIlibc_networking_hpp
 #define StoreAPIlibc_networking_hpp
 
-#include "Sockets/StoreAPIlibc-sockets.hpp"
 #include "Routes/StoreAPIlibc-routes.hpp"
 
 #endif

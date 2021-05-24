@@ -20,11 +20,9 @@ namespace StoreAPI
             char *_address = "http://localhost:8000";
             char *_dir;
 
-            std::vector<Route> _routes;
+            std::vector<Route*> _routes;
 
             struct mg_mgr _mgr;
-
-            
 
             static HTTPServer *_instance;
 
@@ -37,9 +35,9 @@ namespace StoreAPI
 
             static HTTPServer *get_instance();
 
-            Route findRoute(char *name);
+            Route* findRoute(char *name);
 
-            void addRoute(Route route);
+            void addRoute(Route* route);
 
             void loadRoutes();
 

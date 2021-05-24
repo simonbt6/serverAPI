@@ -15,7 +15,7 @@ namespace StoreAPI
 
         public:
             char *get_name() { return _name; }
-            virtual void Go(struct mg_connection *c, char **params);    
+            virtual void Go(struct mg_connection *c, char **params) = 0;    
     
     };
 }
