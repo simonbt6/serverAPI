@@ -1,12 +1,27 @@
-
+// Package imports.
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const app = express();
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+
+// Configuration file.
 const config = require('./src/app/config.json')
+
+// Routes
 const ProductRoute = require('./src/app/route/productRoute');
 const ShopRoute = require('./src/app/route/shopRoute');
 const UserRoute = require('./src/app/route/userRoute');
+
+// HTTP(S) Server
+const privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
+const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+const credentials = { key: privateKey, cert: certificate};
+
+
+// Create Express App.
+const app = express();
 
 /**
  * MIDDLEWARES
@@ -19,21 +34,29 @@ app.use(helmet());
  * ROUTES
  */
 
-// ROOT
+/**
+ * ROOT ROUTE.
+ */
 app.get('/', (req, res) => {
     res.json({
         message: 'root directory'
     });
 });
 
-// Products
+/**
+ * PRODUCT ROUTES.
+ */
+
 app.get('/products/:id', ProductRoute.listOne);
 app.get('/products/', ProductRoute.listAll);
 app.post('/products/delete/:id', ProductRoute.del);
 app.post('/products/update/', ProductRoute.update);
 app.post('/products/create', ProductRoute.add);
 
-// Shops:
+/**
+ * SHOP ROUTES.
+ */
+
 // List one shop
 app.get('/shop/:id', ShopRoute.listOne);
 // List all shops
@@ -45,24 +68,31 @@ app.post('/shop/delete/:id', ShopRoute.deleteOne);
 // Update shop
 app.post('/shop/update', ShopRoute.update);
 
-// Users
-// TODO: Implement USERS
+/**
+ * USER ROUTES.
+ */
 app.get('/users/:id', UserRoute.listOne);
 app.get('/users/', UserRoute.listAll);
 app.post('/users/update/', UserRoute.update);
 app.post('/users/delete/:id', UserRoute.deleteOne);
 app.post('/users/create/', UserRoute.create);
 
-// 404 GATEWAY
+/**
+ * 404 GATEWAY.
+ * POST & GET
+ */
+// 404: Wrong Gateway.
 app.get('*', function(req, res){
     res.status(404);
-    res.send('404: Bad gateway.')
+    res.send('Bad gateway.')
 });
 app.post('*', function(req, res){
     res.status(404);
-    res.send("[POST] 404: Bad gateway");
+    res.send("[POST] Bad gateway");
 });
 
-app.listen(config.app.PORT);
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
 
-
+httpServer.listen(config.app.HTTP_PORT);
+httpsServer.listen(config.app.HTTPS_PORT);
