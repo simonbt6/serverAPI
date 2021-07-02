@@ -15,8 +15,8 @@ const ShopRoute = require('./src/app/route/shopRoute');
 const UserRoute = require('./src/app/route/userRoute');
 
 // HTTP(S) Server
-const privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
-const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+const privateKey = fs.readFileSync('server.key', 'utf8');
+const certificate = fs.readFileSync(config.app.SSL_PATH + 'server.crt', 'utf8');
 const credentials = { key: privateKey, cert: certificate};
 
 
