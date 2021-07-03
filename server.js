@@ -2,6 +2,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cors = require('cors');
+
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
@@ -29,6 +31,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(helmet());
+app.use(cors());
 
 /**
  * ROUTES
