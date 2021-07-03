@@ -88,10 +88,36 @@ async function deleteOne(req, res, next){
     }
 }
 
+async function login(req, res, next){
+    const user = req.body.user;
+    if(user !=undefined){
+        if(user.email !=undefined && user.email !=undefined){
+            UserJS.login(user.email, user.password, db, function(user){
+                if (!user){
+                    res.status(400);
+                    res.json({
+                        "error": "Wrong username or password."
+                    });
+                }
+                else if(typeof user == 'Text'){
+                    res.status(400);
+                    res.json({
+                        "error": user
+                    });
+                }
+                else{
+                    res.json(user);
+                }
+            });
+        } else next();
+    }else next();
+}
+
 module.exports = {
     listAll,
     listOne,
     update,
     create,
-    deleteOne
+    deleteOne,
+    login
 }

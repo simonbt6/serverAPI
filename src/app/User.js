@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-
+const CryptoJS = require('crypto-js');
 
 class User{
     /**
@@ -21,7 +21,7 @@ class User{
     }
 }
 
-function createUUID(){return uuidv4();}
+function createUUID(){ return uuidv4(); }
 
 /**
  *  Insert a new user into database.
@@ -47,7 +47,7 @@ function createUser(user,password, Connection){
  * @param {function callback([User])} callback 
  */
 function listUsers(Connection, callback){
-    Connection.query('SELECT firstname, lastname, email, ip_address FROM user', function(error, results){
+    Connection.query('SELECT uuid, firstname, lastname, email, ip_address FROM user', function(error, results){
         var users = [];
         if(error) return console.log(error);
         for(i = 0; i < results.length; i++){
@@ -62,6 +62,7 @@ function listUsers(Connection, callback){
 function listUser(uuid, Connection, callback){
     Connection.query('SELECT firstname, lastname, email, ip_address FROM user WHERE uuid="'+uuid+'"', function(error, results) {
         if (error) return console.log(error);
+        if(results[0] == undefined) return false;
         if (results[0] == undefined) return false;
         callback(new User(results[0].firstname, results[0].lastname, results[0].email, results[0].ip_address, uuid));
     });
@@ -98,12 +99,25 @@ function del(uuid, Connection){
     });
 }
 
+function login(email, password, Connection, callback){
+    password = CryptoJS.SHA3(password); 
+    var sql = "SELECT * FROM user WHERE email='"+email+"' AND password='"+password+"'";
+    Connection.query(sql, function(error, result) {
+        if(error) return callback(false);
+        if(result == undefined) return callback(false);
+        if(result.length > 1) return callback(false);
+        if(result.length == 0) return callback(false);
+        callback(new User(result[0].firstname, result[0].lastname, result[0].email, result[0].ip_address, result[0].uuid));
+    });
+}
+
 module.exports = {
     User,
     createUser,
     listUsers,
     updateUser,
     listUser,
-    del
+    del,
+    login
 
 }

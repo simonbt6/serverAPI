@@ -1,18 +1,23 @@
 const puppeteer = require('puppeteer');
-
+const uuidv4 = require('uuid/v4');
+// Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36
+// Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36
 // Get product from Amazon
-module.exports.getProductFromAmazon = function(productName, productURL, callback) {
+module.exports.getProductFromAmazon = function(productURL, callback) {
     puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1920,1080','--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36"'] }).then(async browser => {
 
         const page = await browser.newPage();
         await page.goto(productURL);
         await page.waitForSelector('body');
-        await page.screenshot({path: "resources/img/"+ productName + ".png"});
-    
+        
+
         var productInfo = await page.evaluate(() => {
            
             /* Get product title */
             let name = document.body.querySelector('#productTitle').innerText;
+
+            /* Get image URL */
+            const imageURL = document.querySelector('#landingImage').getAttribute('src');
             
             
             let brand = document.body.querySelector('#bylineInfo').innerText.replace('Visit the ', '').replace('Brand: ', '');
@@ -29,7 +34,6 @@ module.exports.getProductFromAmazon = function(productName, productURL, callback
             /* Get availability */
             let availability = document.body.querySelector('#availability').innerText; 
             let formattedAvailability = availability.replace(/[^0-9]/g, '').trim();
-    
     
             /* Get price */
             let price = document.body.querySelector('#priceblock_ourprice').innerText;
@@ -59,7 +63,8 @@ module.exports.getProductFromAmazon = function(productName, productURL, callback
                 "price": price,
                 "availability": formattedAvailability,
                 "features": formattedFeatures,
-                "comparableItems": formattedComparableItems
+                "comparableItems": formattedComparableItems,
+                "imageURL": imageURL
             };
             
             return product;

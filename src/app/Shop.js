@@ -43,7 +43,7 @@ module.exports.getShop = function (id, Connection, callback){
  */
 module.exports.getShops = function (Connection, callback) {
     Connection.query('SELECT * FROM shop', function(error, results){
-        const shops = [];
+        let shops = [];
         if (error) return console.log(error);
         for(i = 0; i < results.length; i++){
             var shopInfos = results[i];

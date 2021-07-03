@@ -3,6 +3,7 @@ const ScraperJS = require('../../scraper/scraper');
 const mysql = require('mysql');
 const config = require('../config.json');
 const db = mysql.createConnection(config.Database);
+const Express = require('express');
 
 /**
  * List all products.
@@ -14,6 +15,91 @@ async function listAll(req, res, next){
     ProductJS.getDbProducts(db, function(e){
         res.json(e);
     });
+}
+
+/**
+ * Orders listing from the highest value of a column.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
+ */
+async function listWMax(req, res, next){
+    let order = true;
+
+    if(req.params !=undefined){
+        if((req.params.count !=undefined && req.params.column !=undefined)){
+            ProductJS.getOrderedProducts(order, req.params.column, parseInt(req.params.count) , db, function(products){
+                if(products){
+                    res.status(200);
+                    res.json(products);
+                }
+                else{
+                    res.status(400);
+                    res.json({
+                        message: "Error"
+                    });
+                }
+            });
+        }
+        else{
+            console.log('Missing params: ', req.params);
+        }
+    }
+    else{
+        console.log('Undefined params: ', req.params);
+    }
+    
+}
+
+/**
+ * Orders listing from the lowest value of a column.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
+ */
+async function listWMin(req, res, next){
+    // False = ascending
+    let order = false;
+
+    if(req.params !=undefined){
+        if((req.params.count !=undefined && req.params.column !=undefined)){
+            ProductJS.getOrderedProducts(order, req.params.column, parseInt(req.params.count) , db, function(products){
+                if(products){
+                    res.status(200);
+                    res.json(products);
+                }
+                else{
+                    res.status(400);
+                    res.json({
+                        message: "Error"
+                    });
+                }
+            });
+        }
+        else{
+            console.log('Missing params: ', req.params);
+        }
+    }
+    else{
+        console.log('Undefined params: ', req.params);
+    }
+}
+
+/**
+ * Search products from tags.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
+ */
+async function searchProduct(req, res, next){
+    if(req.body !=undefined){
+        if(req.body.tags !=undefined 
+            && req.body.tags.length > 0){
+                ProductJS.searchProduct(req.body.tags, db, function(products){
+                    res.json(products);
+                });
+        }
+    }
 }
 
 /**
@@ -89,21 +175,17 @@ async function del(req, res, next){
  */
 async function add(req,res, next){
     const r = req.body.product;
-    if(r.name !=undefined && r.url !=undefined ){
+    if(r.url !=undefined ){
         console.log(r.url);
-        ScraperJS.getProductFromAmazon(r.name, r.url, function(_product) {
+        ScraperJS.getProductFromAmazon(r.url, function(_product) {
             var tags = _product.name.replace(/\//g," ").replace(/[^a-zA-Z0-9\s'"]/g, '').split(" ").filter(item => item);
             console.log(tags);
-            var product = new ProductJS.Product(1, _product.name.toString().slice(0, 99), 1, r.url, _product.price.replace(/\$/g, ''), _product.brand);
-            if(ProductJS.AddProductToDb(product, db) !=false){
+            _product.tags = tags;
+            var product = new ProductJS.Product(1, _product.name.toString().slice(0, 99), 1, r.url,parseFloat(_product.price.replace(/\$/g, '')), _product.brand, _product.imageURL);
+            ProductJS.addProductToDb(product, db, (productID) => {
+                _product.id = productID;
                 res.json(_product);
-            }
-            else{
-                
-                res.json({
-                    message: "Product already in database."
-                });
-            }
+            });
         });
     }
     else res.status(404);
@@ -126,12 +208,13 @@ async function update(req, res, next){
 }
 
 
-
 module.exports = {
     add,
     listOne,
     del,
     update,
     listAll,
-
+    searchProduct,
+    listWMax,
+    listWMin
 };
